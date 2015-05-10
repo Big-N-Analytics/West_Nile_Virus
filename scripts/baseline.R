@@ -9,7 +9,9 @@ library(dplyr)
 library(readr)
 library(ggplot2)
 
-data_dir <- "../input"
+args <- commandArgs(trailing=TRUE)
+data_dir <- args[1]
+results_dir <- args[1]
 train <- read_csv(file.path(data_dir, "train.csv"))
 test <- read_csv(file.path(data_dir, "test.csv"))
 train$Usage <- "Train"
@@ -21,7 +23,7 @@ train_and_test$Date <- as.Date(train_and_test$Date)
 locations_and_dates <- train_and_test %>% select(AddressNumberAndStreet, Longitude, Latitude, Date, Usage) %>% unique
 
 theme_set(theme_gray(base_size = 20))
-png(height=1920, width=1920)
+png(file=paste0(file.path(results_dir), "baseline.png"), height=1920, width=1920)
 ggplot(locations_and_dates) + 
   geom_point(aes(x=Date, y=AddressNumberAndStreet, color=Usage), size=1) +
   scale_x_date(breaks = "1 year")
